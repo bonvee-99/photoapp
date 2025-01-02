@@ -2,6 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import { Storage } from './storage/types';
 import { randomInt } from 'crypto';
+import cors from 'cors';
 
 const upload = multer({ 
   storage: multer.memoryStorage(),
@@ -23,6 +24,7 @@ export class Server {
 
   private setupMiddleware() {
     this.app.use(express.json());
+    this.app.use(cors());
   }
 
   private setupRoutes() {
@@ -32,6 +34,7 @@ export class Server {
 
     // Upload photo
     this.app.post('/photos', upload.single('photo'), async (req, res) => {
+      console.log("request", req);
       try {
         if (!req.file) {
           res.status(400).json({ error: 'No photo provided' });
